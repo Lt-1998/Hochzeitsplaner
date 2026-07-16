@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f8eef3">
+<title>Jenny & Nico – Hochzeitsplaner</title>
+<style>
+:root{--bg:#fffafc;--ink:#332d31;--muted:#7e7178;--rose:#d98da8;--soft:#f5e3ea;--blue:#dcecf5;--green:#dfeee4;--card:#ffffffef;--line:#eadfe4;}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:
+radial-gradient(circle at 0 0,#f7dbe7 0,transparent 26rem),radial-gradient(circle at 100% 5%,#dcecf6 0,transparent 25rem),#fbf7f5;padding-bottom:105px}
+main{max-width:760px;margin:auto;padding:16px}
+.hero,.card{background:var(--card);border:1px solid #fff;box-shadow:0 12px 36px #6e4e5c18;border-radius:26px}
+.hero{padding:25px 20px;overflow:hidden;position:relative}
+.hero:after{content:"✿";position:absolute;right:-8px;top:-30px;font-size:140px;color:#efcad8;opacity:.55}
+.kicker{text-transform:uppercase;letter-spacing:.18em;font-size:11px;font-weight:800;color:var(--muted)}
+h1{font:500 40px Georgia,serif;margin:5px 0 3px} .sub{color:var(--muted);font-size:14px}
+.counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.count{background:#ffffffc9;border-radius:18px;padding:13px} .count b{font:500 28px Georgia,serif;display:block} .count span{font-size:11px;color:var(--muted)}
+.progress{margin-top:13px;background:#fff;border-radius:17px;padding:13px} .ptop{display:flex;justify-content:space-between;font-size:14px;font-weight:800;margin-bottom:8px}
+.bar{height:11px;border-radius:99px;background:#eee2e7;overflow:hidden} .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d98da8,#a9c9df);transition:.3s}
+section{margin-top:18px} .head{display:flex;align-items:center;justify-content:space-between;margin:0 3px 9px} h2{font-size:19px;margin:0}
+.card{padding:14px} .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px} .metric{text-align:center;padding:12px 5px;border-radius:16px;background:#fff}
+.metric b{display:block;font-size:22px} .metric span{font-size:11px;color:var(--muted)}
+.filters{display:flex;gap:7px;overflow:auto;padding:2px 1px 7px;scrollbar-width:none} .filters::-webkit-scrollbar{display:none}
+button,.fakebtn{border:0;border-radius:13px;padding:10px 12px;font:700 13px inherit;background:#f1e5ea;color:#664d58;cursor:pointer}
+button.active{background:#332d31;color:#fff} button.primary{background:linear-gradient(135deg,#d98da8,#c67f9a);color:#fff}
+.tasks{display:grid;gap:8px} .task{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px}
+.task.done .title{text-decoration:line-through;color:#9a9195} .check{appearance:none;-webkit-appearance:none;width:25px;height:25px;border:2px solid #d7bdc8;border-radius:8px;flex:0 0 25px;margin:0;display:grid;place-content:center}
+.check:checked{background:var(--rose);border-color:var(--rose)} .check:checked:after{content:"✓";color:#fff;font-weight:900}
+.body{flex:1;min-width:0} .title{font-weight:750;font-size:14px} .meta{font-size:11px;color:var(--muted);margin-top:3px}
+.del{padding:6px 8px;background:#f8f1f3;font-size:11px} input,select,textarea{width:100%;border:1px solid #dfd2d8;border-radius:13px;padding:12px;font:inherit;background:#fff}
+.form{display:grid;gap:9px} .row{display:grid;grid-template-columns:1fr 1fr;gap:8px} textarea{min-height:130px}
+.timeline{display:grid;gap:8px} .time{display:grid;grid-template-columns:60px 1fr;gap:10px;padding:9px 4px;border-bottom:1px dashed var(--line)} .time:last-child{border:0} .time b{color:#985d75}
+.info{display:grid;gap:9px} .ibox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px} .ibox p{font-size:13px;line-height:1.45;color:var(--muted);margin:5px 0 0}
+.notice{background:#fff6db;border:1px solid #ead59a;border-radius:16px;padding:12px;font-size:13px;line-height:1.4;margin-bottom:10px}
+.nav{position:fixed;z-index:30;bottom:calc(9px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(700px,calc(100% - 18px));display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:#ffffffee;backdrop-filter:blur(18px);padding:7px;border-radius:21px;box-shadow:0 12px 38px #4d344055}
+.nav a{text-align:center;text-decoration:none;color:#756970;font-size:10px;padding:6px 1px} .nav span{display:block;font-size:20px}
+.hidden{display:none!important} .empty{padding:20px;text-align:center;color:var(--muted)} .backup{display:flex;flex-wrap:wrap;gap:8px} .backup>*{flex:1;min-width:135px;text-align:center}
+#toast{position:fixed;bottom:115px;left:50%;transform:translateX(-50%);background:#332d31;color:#fff;padding:10px 14px;border-radius:99px;opacity:0;transition:.25s;z-index:50;font-size:13px} #toast.show{opacity:1}
+@media(min-width:620px){.info{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+<div class="notice"><b>iPhone-Hinweis:</b> In der Vorschau der Dateien-App sind Häkchen und Schaltflächen oft deaktiviert. Tippe auf <b>Teilen</b> und öffne die Datei in <b>Safari</b>. Dort funktionieren Aufgaben, Notizen und Speicherung.</div>
+<header class="hero" id="start">
+<div class="kicker">Hochzeitsplaner</div><h1>Jenny &amp; Nico</h1><div class="sub">Standesamt &amp; Hochzeit · Mai 2027 ✨</div>
+<div class="counts"><div class="count"><b id="civil">–</b><span>Tage bis 10.05.2027</span></div><div class="count"><b id="party">–</b><span>Tage bis 15.05.2027</span></div></div>
+<div class="progress"><div class="ptop"><span>Gesamtfortschritt</span><span id="pct">0 %</span></div><div class="bar"><i id="bar"></i></div></div>
+</header>
+
+<section><div class="head"><h2>Überblick</h2></div><div class="card summary">
+<div class="metric"><b id="allN">0</b><span>Aufgaben</span></div><div class="metric"><b id="doneN">0</b><span>Erledigt</span></div><div class="metric"><b id="openN">0</b><span>Offen</span></div>
+</div></section>
+
+<section id="tasks"><div class="head"><h2>Aufgaben</h2><button id="toggleAdd">＋ Neue Aufgabe</button></div>
+<div id="addBox" class="card hidden" style="margin-bottom:10px"><div class="form">
+<input id="title" placeholder="Neue Aufgabe">
+<div class="row"><select id="cat"></select><input id="due" type="date"></div>
+<button class="primary" id="add">Hinzufügen</button></div></div>
+<div class="filters" id="filters"></div><div class="tasks" id="taskList"></div></section>
+
+<section id="schedule"><div class="head"><h2>Ablauf am 15. Mai</h2></div><div class="card timeline">
+<div class="time"><b>15:00</b><span>Kirchliche Trauung</span></div><div class="time"><b>17:00</b><span>Sektempfang</span></div>
+<div class="time"><b>18:00</b><span>Dinner</span></div><div class="time"><b>20:00</b><span>Eröffnungstanz</span></div>
+<div class="time"><b>21:00</b><span>Hochzeitstorte</span></div><div class="time"><b>00:00</b><span>Mitternachtssnack</span></div>
+</div></section>
+
+<section id="places"><div class="head"><h2>Orte & Hinweise</h2></div><div class="info">
+<div class="ibox"><b>Standesamt · 10. Mai</b><p>Villa Seeliger, Wolfenbüttel beziehungsweise Standesamt Hildesheim. Der genaue Ort sollte noch bestätigt werden.</p></div>
+<div class="ibox"><b>Kirche · 15. Mai</b><p>Klosterkirche St. Maria, 38104 Braunschweig</p></div>
+<div class="ibox"><b>Feierlocation</b><p>Waldhaus Oelper, Am Ölper Holze 1, 38116 Braunschweig</p></div>
+<div class="ibox"><b>Location-Planung</b><p>Maximal 8 Personen pro Tisch, Fotobox, Diashow, Kinderspiele und bis zu 5 Hotelzimmer berücksichtigen.</p></div>
+</div></section>
+
+<section id="notes"><div class="head"><h2>Notizen</h2><span style="font-size:11px;color:var(--muted)">lokal gespeichert</span></div><div class="card"><textarea id="notesArea" placeholder="Absprachen, Ideen, Kontakte, Überraschungen …"></textarea></div></section>
+
+<section id="backup"><div class="head"><h2>Sicherung</h2></div><div class="card"><div class="backup">
+<button id="export">Backup erstellen</button><label class="fakebtn">Backup laden<input id="import" type="file" accept=".json" hidden></label><button id="reset">Zurücksetzen</button>
+</div><p style="font-size:12px;color:var(--muted);line-height:1.45">Die Daten werden lokal in Safari gespeichert. Sichere sie gelegentlich als Datei in iCloud Drive.</p></div></section>
+</main>
+
+<nav class="nav"><a href="#start"><span>💍</span>Start</a><a href="#tasks"><span>✓</span>Aufgaben</a><a href="#schedule"><span>🕒</span>Ablauf</a><a href="#places"><span>📍</span>Orte</a><a href="#notes"><span>📝</span>Notizen</a></nav>
+<div id="toast"></div>
+
+<script>
+(function(){
+const initial=[{"id": 1, "title": "Hochzeitstermin festlegen", "category": "Allgemein", "due": "2026-07-01", "done": true}, {"id": 2, "title": "Budget erstellen", "category": "Allgemein", "due": "2026-07-01", "done": true}, {"id": 3, "title": "Gästeliste erstellen", "category": "Einladungen", "due": "2026-07-01", "done": true}, {"id": 4, "title": "Location buchen", "category": "Location", "due": "2026-07-01", "done": true}, {"id": 5, "title": "Termin Kirche klären", "category": "Kirche", "due": "2026-07-01", "done": true}, {"id": 6, "title": "Tamada buchen", "category": "Feier", "due": "2026-07-01", "done": true}, {"id": 7, "title": "Fotograf buchen", "category": "Dienstleister", "due": "2026-09-01", "done": true}, {"id": 8, "title": "DJ buchen und Playlist abstimmen", "category": "Dienstleister", "due": "2026-09-01", "done": false}, {"id": 9, "title": "Catering buchen", "category": "Dienstleister", "due": "2026-09-01", "done": true}, {"id": 10, "title": "Brautkleid aussuchen", "category": "Braut", "due": "2026-09-01", "done": true}, {"id": 11, "title": "Einladungen verschicken", "category": "Einladungen", "due": "2026-09-01", "done": true}, {"id": 12, "title": "Auto organisieren", "category": "Allgemein", "due": "2026-09-01", "done": false}, {"id": 13, "title": "Anzug aussuchen", "category": "Bräutigam", "due": "2026-11-01", "done": false}, {"id": 14, "title": "Gästeliste kontrollieren", "category": "Einladungen", "due": "2026-11-01", "done": false}, {"id": 15, "title": "Tischordnung planen", "category": "Location", "due": "2026-11-01", "done": false}, {"id": 16, "title": "Videofon organisieren", "category": "Allgemein", "due": "2026-11-01", "done": true}, {"id": 17, "title": "Trauringe aussuchen", "category": "Standesamt", "due": "2027-01-15", "done": false}, {"id": 18, "title": "Friseurprobe und Make-up-Probe", "category": "Braut", "due": "2027-01-15", "done": false}, {"id": 19, "title": "Deko und Floristik planen", "category": "Dekoration", "due": "2027-01-15", "done": false}, {"id": 20, "title": "Menü festlegen", "category": "Location", "due": "2027-01-15", "done": false}, {"id": 21, "title": "Tanzkurs organisieren", "category": "Feier", "due": "2027-01-15", "done": false}, {"id": 22, "title": "Termin Standesamt reservieren", "category": "Standesamt", "due": "2026-11-10", "done": false}, {"id": 23, "title": "Torte bestellen", "category": "Dienstleister", "due": "2027-03-01", "done": false}, {"id": 24, "title": "Hochzeitskleid final prüfen", "category": "Braut", "due": "2027-03-01", "done": false}, {"id": 25, "title": "Tisch- und Menükarten bestellen", "category": "Dekoration", "due": "2027-03-01", "done": false}, {"id": 26, "title": "Trauringe abholen", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 27, "title": "Kirchenablauf festlegen", "category": "Kirche", "due": "2027-03-15", "done": false}, {"id": 28, "title": "Maniküre / Pediküre", "category": "Braut", "due": "2027-05-08", "done": false}, {"id": 29, "title": "Traugespräch mit der Pastorin", "category": "Kirche", "due": "2027-04-15", "done": false}, {"id": 30, "title": "Standesamt-Einladung: WhatsApp-Text vorbereiten", "category": "Einladungen", "due": "2027-02-01", "done": false}, {"id": 31, "title": "Standesamt-Einladung: Datum, Ort und Uhrzeit bestätigen", "category": "Einladungen", "due": "2027-02-01", "done": false}, {"id": 32, "title": "Standesamt-Einladung: Anschluss/Feier ergänzen", "category": "Einladungen", "due": "2027-02-01", "done": false}, {"id": 33, "title": "Party-Einladung: Karte gestalten", "category": "Einladungen", "due": "2027-02-01", "done": false}, {"id": 34, "title": "Party-Einladung: Ablauf ergänzen", "category": "Einladungen", "due": "2027-02-01", "done": false}, {"id": 35, "title": "Party-Einladung: Zu- und Absagen organisieren", "category": "Einladungen", "due": "2027-03-01", "done": false}, {"id": 36, "title": "Party-Einladung: Begleitungen und Kinder abfragen", "category": "Einladungen", "due": "2027-03-01", "done": false}, {"id": 37, "title": "Party-Einladung: Hotels und Tamada-Kontakt ergänzen", "category": "Einladungen", "due": "2027-03-01", "done": false}, {"id": 38, "title": "Personalausweise für das Standesamt bereitlegen", "category": "Standesamt", "due": "2027-04-10", "done": false}, {"id": 39, "title": "Geburtsurkunden bereitlegen", "category": "Standesamt", "due": "2027-04-10", "done": false}, {"id": 40, "title": "Meldebescheinigungen besorgen", "category": "Standesamt", "due": "2027-04-10", "done": false}, {"id": 41, "title": "Anmeldung der Eheschließung abschließen", "category": "Standesamt", "due": "2027-04-10", "done": false}, {"id": 42, "title": "Standesamt-Gebühren bezahlen", "category": "Standesamt", "due": "2027-04-15", "done": false}, {"id": 43, "title": "Zelt oder Überdachung organisieren", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 44, "title": "Bierzeltgarnitur organisieren", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 45, "title": "Stuhl- und Tischkissen organisieren", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 46, "title": "Slushy-Eis-Maschine organisieren", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 47, "title": "Trinksäule organisieren", "category": "Standesamt", "due": "2027-03-15", "done": false}, {"id": 48, "title": "Blumen für das Standesamt organisieren", "category": "Standesamt", "due": "2027-04-01", "done": false}, {"id": 49, "title": "Personalausweise für die Kirche bereitlegen", "category": "Kirche", "due": "2027-05-01", "done": false}, {"id": 50, "title": "Geburtsurkunden für die Kirche bereitlegen", "category": "Kirche", "due": "2027-05-01", "done": false}, {"id": 51, "title": "Taufscheine bereitlegen", "category": "Kirche", "due": "2027-05-01", "done": false}, {"id": 52, "title": "Standesamtliche Heiratsurkunde für die Kirche bereitlegen", "category": "Kirche", "due": "2027-05-11", "done": false}, {"id": 53, "title": "Einzugslied final bestätigen", "category": "Kirche", "due": "2027-03-01", "done": false}, {"id": 54, "title": "Auszugslied final bestätigen", "category": "Kirche", "due": "2027-03-01", "done": false}, {"id": 55, "title": "Geige und Sängerin organisieren", "category": "Kirche", "due": "2027-02-01", "done": false}, {"id": 56, "title": "Kirchliche Anmeldung Anfang 2027 erledigen", "category": "Kirche", "due": "2027-01-31", "done": false}, {"id": 57, "title": "Abbau des Altarschmucks organisieren", "category": "Kirche", "due": "2027-05-14", "done": false}, {"id": 58, "title": "Parken der Luftballons klären", "category": "Kirche", "due": "2027-04-15", "done": false}, {"id": 59, "title": "„Keine Fotos“-Schild vorbereiten", "category": "Kirche", "due": "2027-05-01", "done": false}, {"id": 60, "title": "Traubibeltext auswählen", "category": "Kirche", "due": "2027-04-15", "done": false}, {"id": 61, "title": "Tischordnung mit maximal 8 Personen pro Tisch planen", "category": "Location", "due": "2027-03-15", "done": false}, {"id": 62, "title": "Diashow vorbereiten", "category": "Feier", "due": "2027-04-20", "done": false}, {"id": 63, "title": "Fotobox mit Sebastian abstimmen", "category": "Feier", "due": "2027-04-01", "done": false}, {"id": 64, "title": "Kinderspiele vorbereiten", "category": "Feier", "due": "2027-04-20", "done": false}, {"id": 65, "title": "Service pro Tisch abstimmen", "category": "Location", "due": "2027-04-01", "done": false}, {"id": 66, "title": "1 bis 5 Hotelzimmer reservieren", "category": "Location", "due": "2027-02-15", "done": false}, {"id": 67, "title": "Tischnummern mit Fotos gestalten", "category": "Dekoration", "due": "2027-04-01", "done": false}, {"id": 68, "title": "Dekoverleih final auswählen", "category": "Dienstleister", "due": "2027-01-31", "done": false}, {"id": 69, "title": "Floristin final beauftragen", "category": "Dienstleister", "due": "2027-01-31", "done": false}, {"id": 70, "title": "Torte beim Café final bestellen", "category": "Dienstleister", "due": "2027-03-01", "done": false}, {"id": 71, "title": "Make-up-Dienstleister buchen", "category": "Dienstleister", "due": "2027-01-31", "done": false}, {"id": 72, "title": "Tanzschule auswählen", "category": "Dienstleister", "due": "2027-01-31", "done": false}, {"id": 73, "title": "Brautstrauß bereitlegen", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 74, "title": "Taschentücher einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 75, "title": "Flache Schuhe einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 76, "title": "Deo und Parfum einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 77, "title": "Schminke einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 78, "title": "Schleier einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 79, "title": "Sicherheitsnadel und Faden einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 80, "title": "Lippenstift einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 81, "title": "Jäckchen einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 82, "title": "Kamm einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 83, "title": "Haarspray einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 84, "title": "Zopfgummis einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 85, "title": "Haarspangen einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 86, "title": "Fusselrolle einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 87, "title": "Fleckenstift einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 88, "title": "Ersatzstrumpfhose einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 89, "title": "Zahnseide einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 90, "title": "Brille oder Sonnenbrille einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 91, "title": "Fächer einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 92, "title": "Spiegel einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 93, "title": "Schmuck einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 94, "title": "Pflaster einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 95, "title": "Einlagen oder Binden einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 96, "title": "Handcreme einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 97, "title": "Nagellack einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 98, "title": "Nagelschere und Nagelfeile einpacken", "category": "Braut-Notfalltasche", "due": "2027-05-15", "done": false}, {"id": 99, "title": "Jennys Kleid bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 100, "title": "Jennys Schuhe bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 101, "title": "Jennys Kette, Ohrringe und Armband bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 102, "title": "Jennys Haarschmuck bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 103, "title": "Nicos Anzug bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 104, "title": "Nicos Hemd und Schuhe bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 105, "title": "Nicos Manschetten und Fliege bereitlegen", "category": "Outfit", "due": "2027-05-14", "done": false}, {"id": 106, "title": "Trauzeuginnen-Rede vorbereiten", "category": "Trauzeugin", "due": "2027-04-20", "done": false}, {"id": 107, "title": "Notfallkontakte sammeln", "category": "Trauzeugin", "due": "2027-04-15", "done": false}, {"id": 108, "title": "Tagesablauf mit Braut und Tamada durchgehen", "category": "Trauzeugin", "due": "2027-05-08", "done": false}, {"id": 109, "title": "Braut am Hochzeitstag an Essen und Trinken erinnern", "category": "Trauzeugin", "due": "2027-05-15", "done": false}];
+const KEY="hochzeit-jenny-nico-v3";
+let memory=null, filter="Alle";
+function read(){
+ try{const x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}
+ return memory||{tasks:JSON.parse(JSON.stringify(initial)),notes:""};
+}
+let state=read();
+function save(){
+ memory=state; try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+}
+function toast(s){const e=document.getElementById("toast");e.textContent=s;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1600)}
+function fmt(d){if(!d)return"ohne Termin";return new Date(d+"T12:00:00").toLocaleDateString("de-DE")}
+function countdown(id,date){const n=new Date();n.setHours(0,0,0,0);const d=new Date(date+"T00:00:00");const x=Math.ceil((d-n)/86400000);document.getElementById(id).textContent=x>=0?x:"vorbei"}
+function categories(){return [...new Set(state.tasks.map(x=>x.category))].sort()}
+function render(){
+ countdown("civil","2027-05-10");countdown("party","2027-05-15");
+ const total=state.tasks.length,done=state.tasks.filter(x=>x.done).length,p=Math.round(done/Math.max(total,1)*100);
+ document.getElementById("allN").textContent=total;document.getElementById("doneN").textContent=done;document.getElementById("openN").textContent=total-done;
+ document.getElementById("pct").textContent=p+" %";document.getElementById("bar").style.width=p+"%";
+ const cats=["Alle"].concat(categories()),f=document.getElementById("filters");f.innerHTML="";
+ cats.forEach(c=>{const b=document.createElement("button");b.textContent=c;b.className=c===filter?"active":"";b.onclick=()=>{filter=c;render()};f.appendChild(b)});
+ const sel=document.getElementById("cat");sel.innerHTML="";categories().concat(["Allgemein"]).filter((v,i,a)=>a.indexOf(v)===i).forEach(c=>{const o=document.createElement("option");o.textContent=c;sel.appendChild(o)});
+ const list=document.getElementById("taskList");list.innerHTML="";
+ const shown=state.tasks.filter(x=>filter==="Alle"||x.category===filter).sort((a,b)=>(a.done-b.done)||((a.due||"9999").localeCompare(b.due||"9999")));
+ if(!shown.length)list.innerHTML='<div class="empty">Keine Aufgaben vorhanden.</div>';
+ shown.forEach(t=>{
+  const row=document.createElement("div");row.className="task"+(t.done?" done":"");
+  const cb=document.createElement("input");cb.type="checkbox";cb.className="check";cb.checked=!!t.done;
+  cb.addEventListener("change",()=>{t.done=cb.checked;save();render();});
+  const body=document.createElement("div");body.className="body";
+  const title=document.createElement("div");title.className="title";title.textContent=t.title;
+  const meta=document.createElement("div");meta.className="meta";meta.textContent=t.category+" · "+fmt(t.due);
+  body.append(title,meta);
+  const del=document.createElement("button");del.className="del";del.textContent="Löschen";del.onclick=()=>{if(confirm("Aufgabe löschen?")){state.tasks=state.tasks.filter(x=>x.id!==t.id);save();render()}};
+  row.append(cb,body,del);list.appendChild(row);
+ });
+ document.getElementById("notesArea").value=state.notes||"";
+}
+document.getElementById("toggleAdd").onclick=()=>document.getElementById("addBox").classList.toggle("hidden");
+document.getElementById("add").onclick=()=>{
+ const title=document.getElementById("title").value.trim();if(!title){toast("Bitte Aufgabe eingeben");return}
+ state.tasks.push({id:Date.now(),title:title,category:document.getElementById("cat").value,due:document.getElementById("due").value,done:false});
+ document.getElementById("title").value="";document.getElementById("due").value="";save();render();toast("Aufgabe hinzugefügt");
+};
+document.getElementById("notesArea").addEventListener("input",e=>{state.notes=e.target.value;save()});
+document.getElementById("export").onclick=()=>{
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"}),a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download="hochzeitsplaner-backup.json";document.body.appendChild(a);a.click();a.remove();toast("Backup erstellt");
+};
+document.getElementById("import").onchange=async e=>{try{const x=JSON.parse(await e.target.files[0].text());if(!Array.isArray(x.tasks))throw 0;state=x;save();render();toast("Backup geladen")}catch(_e){alert("Ungültiges Backup")}e.target.value=""};
+document.getElementById("reset").onclick=()=>{if(confirm("Alle eigenen Änderungen zurücksetzen?")){state={tasks:JSON.parse(JSON.stringify(initial)),notes:""};save();render();toast("Zurückgesetzt")}};
+render();
+})();
+</script>
+</body></html>
